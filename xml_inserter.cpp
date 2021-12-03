@@ -27,21 +27,25 @@ QDomElement locate(QDomDocument& doc, QDomElement node,const QString& path,const
     {
         const int posStart=posDelim+1;
 
-        posDelim=path.indexOf(delim,posStart);
+        posDelim=path.indexOf(delim, posStart);
 
         const int tagEnd=(posDelim == -1) ? path.length() : posDelim;
 
         const int tagLength=tagEnd - posStart;
 
-        const QString tag=QStringRef(&path,posStart, tagLength).toString();
+        const QString tag=QStringRef(&path, posStart, tagLength).toString();
 
 
         auto child=node.firstChildElement(tag);
 
-        const bool nullChild = child.isNull();
+        if(tag!=".")
+        {
 
-        node = (nullChild || alwaysAdd) ? node.appendChild(doc.createElement(tag)).toElement()
-                              : child;
+            const bool nullChild = child.isNull();
+            node = (nullChild || alwaysAdd) ? node.appendChild(doc.createElement(tag)).toElement()
+                                            : child;
+        }
+
         if(posDelim==-1)
         {
             return node;

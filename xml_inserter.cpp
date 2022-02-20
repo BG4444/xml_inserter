@@ -1,6 +1,6 @@
 #include "xml_inserter.h"
 #include <QTextCodec>
-#include <SerException.h>
+#include <serexception.h>
 
 void appendTextChild(QDomDocument& doc, QDomElement& parent,const QString& name,const QString& value)
 {

@@ -53,6 +53,43 @@ QDomElement locate(QDomDocument& doc, QDomElement node,const QString& path,const
     }
 }
 
+void appendTextAttributeChild(QDomDocument& doc, QDomElement& parent,const QString& name,const QString& value)
+{
+
+    QDomElement elm=doc.createElement(name);
+
+    QStringList listAttribute;
+
+    listAttribute = value.split(';');
+
+    const QChar delim('=');
+
+    int posDelim=-1;
+
+    QString val;
+
+    for (int i = 0; i < listAttribute.count(); i++)
+    {
+        posDelim=listAttribute.at(i).indexOf(delim);
+
+        if (posDelim>-1)
+        {
+            val = listAttribute.at(i).right(listAttribute.at(i).length() - posDelim-1).trimmed();
+
+            if (val.length()>0)
+            {
+                elm.setAttribute(listAttribute.at(i).left(posDelim),val);
+            }
+        }
+        else
+        {
+            elm.appendChild(doc.createTextNode(listAttribute.at(i)));
+        }
+    }
+
+    parent.appendChild(elm);
+}
+
 
 void insert(QDomDocument& doc, QDomElement node,const QString& path, const QString& value)
 {
@@ -88,6 +125,9 @@ void insert(QDomDocument& doc, QDomElement node,const QString& path, const QStri
                     return;
                 case 'v':
                     appendTextChild(doc,node,tag,value);
+                    return;
+                case 'd':
+                    appendTextAttributeChild(doc, node, tag, value);
                     return;
                 default:
                     throw InvalidInsertMode();

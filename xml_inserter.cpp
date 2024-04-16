@@ -121,13 +121,13 @@ void insert(QDomDocument& doc, QDomElement node,const QString& path, const QStri
             switch(mode)
             {
                 case 'a':
-                    node.setAttribute(tag,value);
+                    node.setAttribute(tag,value.trimmed());
                     return;
                 case 'v':
-                    appendTextChild(doc,node,tag,value);
+                    appendTextChild(doc,node,tag,value.trimmed());
                     return;
                 case 'd':
-                    appendTextAttributeChild(doc, node, tag, value);
+                    appendTextAttributeChild(doc, node, tag, value.trimmed());
                     return;
                 default:
                     throw InvalidInsertMode();
